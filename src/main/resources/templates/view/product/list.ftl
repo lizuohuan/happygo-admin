@@ -1,6 +1,16 @@
 <!-- begin #content -->
 <!-- ================== BEGIN BASE CSS STYLE ================== -->
 [#include "../../include.ftl"]
+<style>
+    .form-group{
+        margin-bottom: 15px!important;
+    }
+    @media (min-width: 768px){
+        .form-inline .form-control{
+            width: 100%;
+        }
+    }
+</style>
 <div id="content" class="content">
     <form id="listForm" action="list" class="form-inline" >
         <div class="row">
@@ -25,8 +35,9 @@
                             </div>
                             <div class="form-group col-md-4">
                                 <label class="col-md-4 control-label">请选择商品分类:</label>
-                                <select class="form-control" id="productCategoryId">
-                                    <option value="" >请选择商品分类</option>
+                                <div class="col-md-4">
+                                    <select class="form-control" style="width: 100%" name="productCategoryId">
+                                        <option value="" >请选择</option>
                                 [#list productCategoryList as productCategory]
                                     [#if productCategory.childList?? && (productCategory.childList?size > 0)]
                                         <optgroup label="${productCategory.name}">
@@ -38,15 +49,43 @@
                                     <option value="${productCategory.id}" [#if productCategory.id ==(productCategoryId)!'' ]selected="selected"[/#if]>${productCategory.name}</option>
                                     [/#if]
                                 [/#list]
-                                </select>
+                                    </select>
+                                </div>
+
                             </div>
                             <div class="form-group col-md-4">
-                                <label class="col-md-4 control-label">isPromotion:</label>
+                                <label class="col-md-4 control-label">是否促销:</label>
                                 <div class="col-md-4">
-                                    <input type="text" name="name" class="form-control" placeholder="名称"  value="${(name)!''}"/>
+                                    <select class="form-control" style="width: 100%" name="isPromotion">
+                                        <option value="" >请选择</option>
+                                        <option value="0" [#if "0" ==(isPromotion)!'' ]selected="selected"[/#if]>否</option>
+                                        <option value="1" [#if "1" ==(isPromotion)!'' ]selected="selected"[/#if]>是</option>
+                                    </select>
+                                </div>
+                            </div><br>
+                            <div class="form-group col-md-4">
+                                <label class="col-md-4 control-label">是否为积分商品:</label>
+                                <div class="col-md-4">
+                                    <select class="form-control" style="width: 100%" name="isIntegral">
+                                        <option value="" >请选择</option>
+                                        <option value="0" [#if "0" ==(isIntegral)!'' ]selected="selected"[/#if] >否</option>
+                                        <option value="1" [#if "1" ==(isIntegral)!'' ]selected="selected"[/#if]>是</option>
+                                    </select>
                                 </div>
                             </div>
-                            <button type="submit" class="btn btn-default">查询</button>
+                            <div class="form-group col-md-4">
+                                <label class="col-md-4 control-label">是否为推荐商品:</label>
+                                <div class="col-md-4">
+                                    <select class="form-control" style="width: 100%" name="isHot">
+                                        <option value="" >请选择</option>
+                                        <option value="0" [#if "0" ==(isHot)!'' ]selected="selected"[/#if]>否</option>
+                                        <option value="1" [#if "1" ==(isHot)!'' ]selected="selected"[/#if]>是</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <button type="submit" class="btn btn-default">查询</button>
+                            </div>
                         </div>
                     </div>
                     <div class="panel panel-default actionPanel">
@@ -64,7 +103,7 @@
                             <th width="70">序号</th>
                             <th>商品名</th>
                             <th>商品编号</th>
-                            <th>描述</th>
+                            [#--<th>描述</th>--]
                             <th>所属分类</th>
                             <th>价格</th>
                             <th>是否促销</th>
@@ -82,7 +121,7 @@
                                 <td width="70" align="center">${item_index+1}</td>
                                 <td>${item.name!''}</td>
                                 <td>${item.number!''}</td>
-                                <td>${item.describe!''}</td>
+                                [#--<td>${item.describe!''}</td>--]
                                 <td>${item.productCategoryName!''}</td>
                                 <td>${item.price!''}</td>
                                 <td>${(item.isPromotion==1)?string("是","否")}</td>
@@ -94,11 +133,9 @@
                                 [#--<td>${(item.updateTime?string("yyyy-MM-dd hh:MM:ss"))!''}--]
                                 <td>
 
-                                [#if item.system?? && item.system]
-                                    [@shiro.hasPermission name = "system:product:edit"]
+                                [@shiro.hasPermission name = "system:product:edit"]
                                       <a href="edit?id=${item.id}"><li class="fa  fa-edit">编辑</li></a>
-                                    [/@shiro.hasPermission]
-                                [/#if]
+                                [/@shiro.hasPermission]
                                 [@shiro.hasPermission name = "system:product:del"]
                                    <a href="javascript:void (0)" class="delete" data-id="${item.id}" ><li class="fa fa-trash">删除</li></a>
                                 [/@shiro.hasPermission]

@@ -18,6 +18,7 @@
                 </div>
                 <div class="panel-body">
                     <form class="form-horizontal" action="${base}/product/save"   method="post">
+                        <input type="text" style="display: none" name="id" value="${(product.id)!''}"/>
                         <div class="form-group">
                             <label class="col-md-1 control-label">商品分类:</label>
                             <div class="col-md-4">
@@ -94,7 +95,8 @@
                         <div class="form-group">
                             <label class="col-md-1 control-label">商品描述:</label>
                             <div class="col-md-4">
-                                <input type="text" name="describe" class="form-control" placeholder="描述"  value="${(product.describe)!''}"/>
+                                [#--<input type="text" name="describe" class="form-control" placeholder="描述"  value="${(product.describe)!''}"/>--]
+                                <script id="editor" type="text/plain" style="width:1024px;height:300px;"></script>
                             </div>
                         </div>
                         <div class="form-group">
@@ -116,6 +118,8 @@
 
 <script>
     $(function () {
+        var ue = UE.getEditor('editor');
+
         //装配选中的商品分类
         $("#productCategoryId").change(function () {
             $("input[name='productCategoryId']").val($(this).val());

@@ -47,7 +47,7 @@ public class ProductController extends BaseController {
      */
     @RequestMapping(value = "list")
     public String list(Pages<Product> page, Model model ,String name ,String number ,String productCategoryId,
-                       Integer isPromotion ,Integer isIntegral ,Integer isHot ,
+                       String isPromotion ,String isIntegral ,String isHot ,
                        Long createTimeStart ,Long createTimeEnd){
         List<Filter> filters = new ArrayList<>();
         if (CommonUtil.isEmpty2(name)){
