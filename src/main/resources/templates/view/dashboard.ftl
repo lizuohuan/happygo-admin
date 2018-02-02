@@ -36,7 +36,7 @@
     $().ready(function () {
         var ue = UE.getEditor('editor');
         $("#files").uploadFile({
-            path:"Test/image",
+            path:"image",
             imageService: Global.imageService,
             uploadUrl: "/upload/images",
             callback:function(data) {

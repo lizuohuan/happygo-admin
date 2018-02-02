@@ -70,3 +70,6 @@
 <script src="${basePath}/assets/js/common.js"></script>
 <script src="${basePath}//assets/js/web_support.js"></script>
 <script src="${basePath}/assets/js/list.js"></script>
+
+
+<script type="text/javascript" src="${basePath}/assets/js/angular.min.js"></script>
