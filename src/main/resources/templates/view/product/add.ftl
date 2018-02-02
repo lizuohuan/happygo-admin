@@ -195,8 +195,14 @@
                 console.log(data)
             }
         });
-        
-        
+
+        $(".delImg").click(function () {
+            $(this).parent("div").remove();
+            var imgJsonAryStr = $("#imgJsonAryStrImg");
+            if (imgJsonAryStr.children("div") == null) {
+                $("#imgJsonAryStr").css("display","none");
+            }
+        });
 
 
         $("#submitBtn").click(function () {
