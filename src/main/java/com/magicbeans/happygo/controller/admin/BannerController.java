@@ -6,6 +6,7 @@ import com.magicbeans.base.db.Filter;
 import com.magicbeans.happygo.Message;
 import com.magicbeans.happygo.controller.BaseController;
 import com.magicbeans.happygo.entity.Banner;
+import com.magicbeans.happygo.service.IProductService;
 import com.magicbeans.happygo.util.CommonUtil;
 import com.magicbeans.happygo.util.Timestamp;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +21,7 @@ import com.magicbeans.happygo.service.IBannerService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.annotation.Resource;
 import javax.validation.Valid;
 import java.util.*;
 
@@ -38,6 +40,8 @@ public class BannerController extends BaseController {
     
     @Autowired
     private  IBannerService bannerService;
+    @Resource
+    private IProductService productService;
 
 
     /**
@@ -46,18 +50,20 @@ public class BannerController extends BaseController {
      * @param model 返回
      * @param name banner名
      * @param title 标题
+     * @param productName 商品名
      * @param type 类型
      * @param createTimeStart 创建的开始时间
      * @param createTimeEnd 创建的结束时间
      * @return
      */
     @GetMapping("list")
-    public String list(Pages pages, Model model ,String name,String title,Integer type,
+    public String list(Pages pages, Model model ,String name,String title,String productName,Integer type,
                        Long createTimeStart ,Long createTimeEnd){
         Map<String ,Object> map = new HashMap<>();
         map.put("name",name);
         map.put("title",title);
         map.put("type",type);
+        map.put("productName",productName);
         if (null != createTimeStart) {
             map.put("createTimeStart",new Date(createTimeStart));
             model.addAttribute("createTimeStart", Timestamp.DateTimeStamp(new Date(createTimeStart),"yyyy-MM-dd HH:mm:ss"));
@@ -77,7 +83,8 @@ public class BannerController extends BaseController {
     */
     @GetMapping("add")
     public String toAdd(Model model){
-        return "banner/add";
+        model.addAttribute("productList",productService.findAll());
+        return "view/banner/add";
     }
 
 
@@ -89,6 +96,7 @@ public class BannerController extends BaseController {
     */
     @GetMapping("edit")
     public String edit(@RequestParam String id, Model model){
+        model.addAttribute("productList",productService.findAll());
         model.addAttribute("banner",bannerService.find(id));
         return "view/banner/edit";
     }
