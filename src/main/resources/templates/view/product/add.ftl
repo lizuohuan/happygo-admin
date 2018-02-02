@@ -55,8 +55,8 @@
                         <div class="form-group">
                             <label class="col-md-1 control-label">商品轮播图:</label>
                             <div class="col-md-9">
-                                <span id="imgJsonAryStr" style="[#if (product.imgList)?size > 0]display:block;[#else ]display:none;[/#if]float: left;">
-                                    [#if (product.imgList)?size > 0]
+                                <span id="imgJsonAryStr" style="[#if (product.imgList)?? && (product.imgList)?size > 0]display:block;[#else ]display:none;[/#if]float: left;">
+                                    [#if (product.imgList)?? && (product.imgList)?size > 0]
                                         [#list product.imgList as imgUrl]
                                         <div style="text-align: center;float: left;margin-right: 10px">
                                             <img style="width: 200px;height: auto;" src2="${imgUrl}" src="{{ipImg}}/${imgUrl}" name="imgJsonAryStrImg"><br>
