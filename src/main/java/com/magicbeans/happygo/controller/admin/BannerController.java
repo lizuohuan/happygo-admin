@@ -60,6 +60,9 @@ public class BannerController extends BaseController {
     public String list(Pages pages, Model model ,String name,String title,String productName,Integer type,
                        Long createTimeStart ,Long createTimeEnd){
         Map<String ,Object> map = new HashMap<>();
+        if (pages.getCurrent() == 1) {
+            pages.setCurrent(pages.getCurrent() - 1);
+        }
         map.put("name",name);
         map.put("title",title);
         map.put("type",type);
@@ -73,7 +76,11 @@ public class BannerController extends BaseController {
             model.addAttribute("createTimeEnd",Timestamp.DateTimeStamp(new Date(createTimeEnd),"yyyy-MM-dd HH:mm:ss"));
         }
 
-        model.addAttribute("page", bannerService.findPage(pages,null,null));
+        model.addAttribute("name", name);
+        model.addAttribute("title", title);
+        model.addAttribute("type", type);
+        model.addAttribute("productName", productName);
+        model.addAttribute("page", bannerService.list(map,pages));
         return "view/banner/list";
     }
 

@@ -73,3 +73,4 @@
 
 
 <script type="text/javascript" src="${basePath}/assets/js/angular.min.js"></script>
+<script type="text/javascript" src="${basePath}/assets/js/vue.min.js"></script>

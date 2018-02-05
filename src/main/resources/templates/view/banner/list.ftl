@@ -11,8 +11,8 @@
         }
     }
 </style>
-<div [#--ng-app="bannerAppList" ng-controller="controller" ng-cloak--] id="content" class="content">
-    <form id="listForm" action="${basePath}/log" class="form-inline">
+<div ng-app="bannerAppList" ng-controller="controller" ng-cloak id="content" class="content">
+    <form id="listForm" action="${basePath}/banner/list" class="form-inline">
         <div class="row">
             <!-- begin col-12 -->
             <div class="col-md-12">
@@ -49,7 +49,7 @@
                                 <div class="form-group col-md-4">
                                     <label class="col-md-4 control-label">类型:</label>
                                     <div class="col-md-4">
-                                        <select class="form-control" style="width: 100%" name="isPromotion">
+                                        <select class="form-control" style="width: 100%" name="type">
                                             <option value="" >请选择</option>
                                             <option value="0" [#if (type)?? && 0 == type ]selected="selected"[/#if]>商品</option>
                                             <option value="1" [#if (type)?? && 1 == type ]selected="selected"[/#if]>外链</option>
@@ -88,8 +88,8 @@
             <td width="70" align="center">${item_index+1}</td>
             <td> ${item.name!''}</td>
             <td> ${item.title!''}</td>
-            <td> ${item.productName!''}</td>
-            <td> ${(item.img)!''}[#--[#if (item.img)?? && (item.img)!'' ]<img style="height: 100px;width: auto" src="{{ipImg}}/${item.img}">[/#if]--]</td>
+            <td> [#if (item.product)?? ]${(item.product.name)!''}[/#if]</td>
+            <td> [#--${(item.img)!''}--][#if (item.img)?? ]<img style="height: 100px;width: auto" src="{{ipImg}}/${item.img}">[/#if]</td>
             <td> ${item.link!''}</td>
             <td> ${(item.type==0)?string("商品","外链")}</td>
             <td>
@@ -119,11 +119,11 @@
 </div>
 
 <script type="application/javascript">
-    [#--var webApp = angular.module('bannerAppList', []);--]
-    [#--webApp.controller("controller", function($scope, $timeout) {--]
-        [#--$scope.ipImg = Global.imageService;--]
-    [#--});--]
-    [#--[@flash_message /]--]
+    var webApp = angular.module('bannerAppList', []);
+    webApp.controller("controller", function($scope, $timeout) {
+        $scope.ipImg = Global.imageService;
+    });
+    [@flash_message /]
 
 
 
@@ -131,14 +131,15 @@
         $(".delete").click(function () {
             var id = $(this).attr("data-id");
             alertServer.cofirm("确认删除", "删除", function (flag) {
-                if (flag)
+                if (flag) {
                     Ajax.Get("${basePath}/banner/del/" + id).done(function (res) {
                         Notify.success("删除成功");
                         window.location.reload()
                     }).fail(function (err) {
                         swal("错误", '操作失败', "error")
                     })
-            }
+                }
+            })
         });
     });
 </script>
