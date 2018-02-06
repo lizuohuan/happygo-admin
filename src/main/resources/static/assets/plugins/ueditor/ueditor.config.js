@@ -31,7 +31,8 @@
 
         // 服务器统一请求接口路径
         // , serverUrl:"http://image.36dr.net:5888/config"
-        , serverUrl:"http://192.168.31.110:8088/config"
+        // , serverUrl:"http://192.168.31.110:8088/config"
+        , serverUrl:"http://139.129.111.76:8130/config"
 
         //工具栏上的所有的功能按钮和下拉框，可以在new编辑器的实例时选择自己需要的重新定义
         , toolbars: [[

@@ -44,8 +44,8 @@ public class OrderController extends BaseController {
      * @param model 返回
      * @param orderNumber 订单号
      * @param expressNumber 运单号
-     * @param userName 购买用户
-     * @param adminName 后台操作用户
+     * @param nickName 购买用户
+     * @param username 后台操作用户
      * @param status 0：待支付 1：已支付 2：待发货 3：已发货 4：已完成 5：已取消 6：退款中
      * @param payMethod 支付状态 0：支付宝 1：微信 2：欢喜券 3：线下支付
      * @param userIsValid 是否有效  0 无效 1 有效
@@ -54,18 +54,18 @@ public class OrderController extends BaseController {
      */
     @GetMapping("list")
     public String list(Pages pages, Model model, String orderNumber ,String expressNumber,
-                       String userName,String adminName ,Integer status ,Integer payMethod,
+                       String nickName,String username ,Integer status ,Integer payMethod,
                        Integer userIsValid,Integer adminOk ){
         Map<String ,Object> map = new HashMap<>();
         map.put("orderNumber",orderNumber);
         map.put("expressNumber",expressNumber);
-        map.put("userName",userName);
-        map.put("adminName",adminName);
+        map.put("nickName",nickName);
+        map.put("username",username);
         map.put("status",status);
         map.put("payMethod",payMethod);
         map.put("userIsValid",userIsValid);
         map.put("adminOk",adminOk);
-        model.addAttribute("page", orderService.findPage(pages,null,null));
+        model.addAttribute("page", orderService.list(pages,map));
         return "view/order/list";
     }
 
