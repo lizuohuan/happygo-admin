@@ -1,5 +1,5 @@
 var Global = {
-    imageService : 'http://139.129.111.76:8130/'
+    imageService : 'http://192.168.31.110:8088/'
     // imageService : 'http://192.168.31.110:8088/'
 }
 
