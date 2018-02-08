@@ -96,7 +96,7 @@
                                 </div>
 
                                 <div class="form-group col-md-4">
-                                    <label class="col-md-4 control-label">是否有效:</label>
+                                    <label class="col-md-4 control-label">后台是否确认支付:</label>
                                     <div class="col-md-4">
                                         <select class="form-control" style="width: 100%" name="adminOk">
                                             <option value="" >请选择</option>
@@ -114,9 +114,9 @@
                         </div>
                         <div class="panel panel-default actionPanel">
                         [#--添加操作按钮--]
-                            <div class="row m-l-1 ">
-                                <a href="${basePath}/order/add" class="btn btn-sm btn-success">添加</a>
-                            </div>
+                            [#--<div class="row m-l-1 ">--]
+                                [#--<a href="${basePath}/order/add" class="btn btn-sm btn-success">添加</a>--]
+                            [#--</div>--]
                         </div>
                         <table class="table table-bordered table-striped">
                             <thead>
@@ -155,21 +155,36 @@
             <td> ${item.username!''}</td>
             <td> ${item.expressNumber!''}</td>
             <td>
-                <a href="${basePath}/order/edit?id=${item.id}">
-                    <li class="fa  fa-edit">编辑</li>
-                </a>
-                <a href="javascript:void (0)" class="delete" data-id="${item.id}">
-                    <li class="fa fa-trash">删除</li>
-                </a>
+                [#--<a href="${basePath}/order/edit?id=${item.id}">--]
+                    [#--<li class="fa  fa-edit">编辑</li>--]
+                [#--</a>--]
+                [#if (item.payMethod)?? && (item.payMethod) == 3]
+                    [#if (item.adminOk)?? && (item.adminOk) == 0]
+                        <a href="javascript:void (0)" class="updateAdminOk" data-id="${item.id}" data-adminOk="1">
+                            <li class="fa fa-trash">确认支付</li>
+                        </a>
+                        <a href="javascript:void (0)" class="updateAdminOk" data-id="${item.id}" data-adminOk="2">
+                            <li class="fa fa-trash">未支付</li>
+                        </a>
+                    [/#if]
+                [/#if]
+                [#if (item.status)?? && (item.status) == 2]
+                        <a href="javascript:void (0)" class="updateStatus" data-id="${item.id}" data-Status="3">
+                            <li class="fa fa-trash">发货</li>
+                        </a>
+                [/#if]
+                [#--<a href="javascript:void (0)" class="delete" data-id="${item.id}">--]
+                    [#--<li class="fa fa-trash">删除</li>--]
+                [#--</a>--]
             </td>
         </tr>
         [/#list]
                             </tbody>
                         </table>
 
-    [@pagination pageNumber = page.current totalPages = page.pages]
-        [#include "../../pagination.ftl"]
-    [/@pagination]
+     [@pagination pageNumber = page.current totalPages = page.pages]
+         [#include "../../pagination.ftl"]
+     [/@pagination]
                     </div>
                 </div>
                 <!-- end panel -->
@@ -198,6 +213,94 @@
                     }).fail(function (err) {
                         swal("错误", '操作失败', "error")
                     })
+            })
+        });
+        $(".updateAdminOk").click(function () {
+            var id = $(this).attr("data-id");
+            var adminOk = $(this).attr("data-adminOk");
+            alertServer.cofirm("确认操作", "确认", function (flag) {
+                if (flag) {
+                    var ary = {
+                        orderId:id,
+                        adminOk:adminOk
+                    }
+                    Ajax.Post("${basePath}/order/updateAdminOk",ary).done(function (res) {
+                        if (res.code == 200) {
+                            Notify.success("操作成功");
+                            window.location.reload()
+                        } else {
+                            setTimeout(function () {
+                                swal("错误", res.msg, "error")
+                            },100)
+                        }
+
+                    }).fail(function (err) {
+                        setTimeout(function () {
+                            swal("错误", err, "error")
+                        },100)
+                    })
+                    [#--$.ajax({--]
+                        [#--url: "${basePath}/order/updateAdminOk",--]
+                        [#--data: {--]
+                            [#--orderId:id,--]
+                            [#--adminOk:adminOk--]
+                        [#--},--]
+                        [#--type: "post",--]
+                        [#--dataType: "json",--]
+                        [#--success:function (res) {--]
+                            [#--if (res.status == 200) {--]
+                                [#--Notify.success("操作成功");--]
+                                [#--window.location.reload()--]
+                            [#--} else {--]
+                                [#--swal("错误", '操作失败', "error")--]
+                            [#--}--]
+                        [#--}--]
+                    [#--});--]
+
+                }
+
+            })
+        });
+        $(".updateStatus").click(function () {
+            var id = $(this).attr("data-id");
+            var status = $(this).attr("data-status");
+            // var html = "<div class=\"form-group col-md-4\">\n" +
+            //         "                                    <label class=\"col-md-4 control-label\">运单号:</label>\n" +
+            //         "                                    <div class=\"col-md-4\">\n" +
+            //         "                                        <input type=\"text\" name=\"expressNumber\" class=\"form-control\" placeholder=\"运单号\" />\n" +
+            //         "                                    </div>\n" +
+            //         "                                </div>";
+
+            alertServer.cofirm("请输入运单号", "确认","input" ,function (expressNumber) {
+                console.log(expressNumber)
+                if (null != expressNumber && $.trim(expressNumber).length > 0) {
+                    var ary = {
+                        orderId:id,
+                        status:status,
+                        expressNumber:expressNumber
+                    }
+                    Ajax.Post("${basePath}/order/updateStatus",ary).done(function (res) {
+                        if (res.code == 200) {
+                            Notify.success("发货成功");
+                            window.location.reload()
+                        } else {
+                            setTimeout(function () {
+                                swal("错误", res.msg, "error")
+                            },100)
+
+                        }
+                    }).fail(function (err) {
+                        setTimeout(function () {
+                            swal("错误", err, "error")
+                        },100)
+                    })
+                } else {
+                    setTimeout(function () {
+                        swal("错误", "请输入运单号", "error")
+                    },200)
+
+                }
+
             })
         });
     });

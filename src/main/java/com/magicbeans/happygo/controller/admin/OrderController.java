@@ -4,7 +4,11 @@ package com.magicbeans.happygo.controller.admin;
 import com.alibaba.druid.util.StringUtils;
 import com.magicbeans.happygo.Message;
 import com.magicbeans.happygo.controller.BaseController;
+import com.magicbeans.happygo.entity.Admin;
 import com.magicbeans.happygo.entity.Order;
+import com.magicbeans.happygo.service.ISystemConfigService;
+import com.magicbeans.happygo.util.CommonUtil;
+import com.magicbeans.happygo.util.StatusConstant;
 import org.springframework.web.bind.annotation.*;
 import com.magicbeans.base.ajax.ResponseData;
 import com.magicbeans.base.Pages;
@@ -17,6 +21,7 @@ import com.magicbeans.happygo.service.IOrderService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.annotation.Resource;
 import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.Map;
@@ -36,6 +41,8 @@ public class OrderController extends BaseController {
     
     @Autowired
     private  IOrderService orderService;
+    @Resource
+    private ISystemConfigService systemConfigService;
 
 
     /**
@@ -132,6 +139,66 @@ public class OrderController extends BaseController {
         return redirect("list");
     }
 
+    /**
+     * 线下订单更新是否支付状态
+     * @param orderId
+     * @param adminOk
+     * @return
+     */
+    @RequestMapping("updateAdminOk")
+    @ResponseBody
+    public ResponseData updateAdminOk(String orderId , Integer adminOk) {
+        if (CommonUtil.isEmpty(orderId,adminOk)) {
+            return new ResponseData(false,"字段不能为空",null,StatusConstant.FIELD_NOT_NULL);
+//            return result.setError(StatusConstant.FIELD_NOT_NULL,"字段不能为空");
+        }
+        Admin admin = getLoginUser();
+        Order order = orderService.find(orderId);
+        if (CommonUtil.isEmpty(order)) {
+            return new ResponseData(false,"未知订单",null,StatusConstant.NO_DATA);
+        }
+        if (CommonUtil.isEmpty(order.getPayMethod())) {
+            return new ResponseData(false,"支付类型异常或还未支付",null,StatusConstant.ORDER_STATUS_ABNORMITY);
+        }
+        if (!order.getPayMethod().equals(StatusConstant.PAY_METHOD_UNDER_LINE)) {
+            return new ResponseData(false,"此订单不为线下订单",null,StatusConstant.ORDER_STATUS_ABNORMITY);
+        }
+        orderService.confirmUnderOrder(orderId,admin.getId(),adminOk,systemConfigService.getSystemConfig());
+        return new ResponseData(true,"操作成功",null,StatusConstant.SUCCESS_CODE);
+    }
 
+    /**
+     * 更新订单状态
+     * @param orderId
+     * @param status
+     * @return
+     */
+    @PostMapping("updateStatus")
+    @ResponseBody
+    public ResponseData updateStatus(String orderId , Integer status,String expressNumber) {
+        if (CommonUtil.isEmpty(orderId,status)) {
+            return new ResponseData(false,"字段不能为空",null,StatusConstant.FIELD_NOT_NULL);
+        }
+        Order order = orderService.find(orderId);
+        if (CommonUtil.isEmpty(order)) {
+            return new ResponseData(false,"未知订单",null,StatusConstant.NO_DATA);
+        }
+        if (CommonUtil.isEmpty(order.getStatus())) {
+            return new ResponseData(false,"订单状态异常",null,StatusConstant.ORDER_STATUS_ABNORMITY);
+        }
+        if (status.equals(StatusConstant.ORDER_SENT) &&
+                !order.getStatus().equals(StatusConstant.ORDER_WAITING_SEND)) {
+            return new ResponseData(false,"订单状态异常",null,StatusConstant.ORDER_STATUS_ABNORMITY);
+        } else {
+            if (CommonUtil.isEmpty(expressNumber)) {
+                return new ResponseData(false,"请录入运单号",null,StatusConstant.FIELD_NOT_NULL);
+            }
+            //录入快递单号
+            order.setExpressNumber(expressNumber);
+        }
+        order.setStatus(status);
+        orderService.update(order);
+        return new ResponseData(true,"操作成功",null,StatusConstant.SUCCESS_CODE);
+    }
 }
 

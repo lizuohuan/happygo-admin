@@ -1,15 +1,15 @@
 var Global = {
-    imageService : 'http://139.129.111.76:8130/'
-    // imageService : 'http://192.168.31.110:8088/'
+    // imageService : 'http://139.129.111.76:8130/'
+    imageService : 'http://192.168.31.110:8088/'
 }
 
 var alertServer = alertServer||{}
 
-alertServer.cofirm = function (text,confirmText,fun) {
+alertServer.cofirm = function (text,confirmText,type,fun) {
     swal({
             title: "提示",
             text: text,
-            type: "warning",
+            type: type || "warning",
             showCancelButton: true,
             confirmButtonColor: "#DD6B55",
             confirmButtonText: confirmText,
@@ -71,19 +71,20 @@ Ajax.ajax = function ajax(url, param, type) {
         url: url,
         data: param || {},
         type: type || 'GET',
-        contentType: "application/json; charset=utf-8",
         dataType: "json",
     });
 }
 Ajax.ajaxSend =function(url, param, type) {
     return Ajax.ajax(url, param, type).then(function(resp){
-        // 成功回调
-        if(resp.status){
-            return resp.body; // 直接返回要处理的数据，作为默认参数传入之后done()方法的回调
-        }
-        else{
-            return $.Deferred().reject(resp.msg); // 返回一个失败状态的deferred对象，把错误代码作为默认参数传入之后fail()方法的回调
-        }
+        console.log(resp);
+        return resp;
+        // // 成功回调
+        // if(resp.status){
+        //     return resp.body; // 直接返回要处理的数据，作为默认参数传入之后done()方法的回调
+        // }
+        // else{
+        //     return $.Deferred().reject(resp.msg); // 返回一个失败状态的deferred对象，把错误代码作为默认参数传入之后fail()方法的回调
+        // }
     }, function(err){
         // 失败回调
         return $.Deferred().reject("操作失败 错误码"+err.status);

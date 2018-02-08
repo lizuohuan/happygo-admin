@@ -37,7 +37,7 @@ public class SystemConfigController extends BaseController {
      */
     @GetMapping("edit")
     public String edit(Model model) {
-        model.addAttribute("systemConfig", systemConfigService.findAll().get(0));
+        model.addAttribute("systemConfig", systemConfigService.getSystemConfig());
         return "view/systemConfig/edit";
     }
 
@@ -50,7 +50,7 @@ public class SystemConfigController extends BaseController {
      */
     @PostMapping(value = "save")
     public String save(@Valid SystemConfig systemconfig, Model model, RedirectAttributes redirectAttributes) {
-        systemConfigService.update(systemconfig);
+        systemConfigService.updateSystemConfig(systemconfig);
         addFlashMessage(redirectAttributes,new Message(Message.Type.success,"保存成功"));
         return redirect ("edit");
     }
