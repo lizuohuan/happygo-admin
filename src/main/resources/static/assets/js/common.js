@@ -113,13 +113,6 @@ Ajax.ajaxSend2 =function(url, param, type) {
     return Ajax.ajax2(url, param, type).then(function(resp){
         console.log(resp);
         return resp;
-        // 成功回调
-        // if(resp.status){
-        //     return resp.body; // 直接返回要处理的数据，作为默认参数传入之后done()方法的回调
-        // }
-        // else{
-        //     return $.Deferred().reject(resp.msg); // 返回一个失败状态的deferred对象，把错误代码作为默认参数传入之后fail()方法的回调
-        // }
     }, function(err){
         // 失败回调
         return $.Deferred().reject("操作失败 错误码"+err.status);
