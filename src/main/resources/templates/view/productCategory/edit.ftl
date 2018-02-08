@@ -22,6 +22,13 @@
                             </div>
                         </div>
                         <div class="form-group">
+                            <label class="col-md-1 control-label">分类图:</label>
+                            <div class="col-md-4">
+                                <img style="width: 200px;height: auto;" isHave="0" src="${base}/assets/img/uploadImg.png" id="coverImg">
+                                <input type="text" name="icon" style="display: none"   value="${(productCategory.icon)!''}"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
                             <label class="col-md-1 control-label">上级分类: </label>
                             <div class="col-md-6">
                                 <select class="form-control" name="parentId">
@@ -49,4 +56,24 @@
     </div>
 
 </div>
+
+<script>
+    var icon = "${(productCategory.icon)!''}";
+    if (null != icon && "" != icon.trim()) {
+        $("#coverImg").attr("src",Global.imageService+"/"+icon);
+        $("#coverImg").attr("isHave","1");
+    }
+
+    $("#coverImg").uploadFile({
+        path:"image",
+        imageService: Global.imageService,
+        uploadUrl: "/upload/images",
+        callback:function(data) {
+            $("#coverImg").attr("src",Global.imageService+"/"+data[0].sourcePath);
+            $("input[name='icon']").val(data[0].sourcePath);
+            $("#coverImg").attr("isHave","1");
+            console.log(data)
+        }
+    });
+</script>
 
