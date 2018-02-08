@@ -75,7 +75,7 @@
     $(function () {
         $(".delete").click(function () {
             var  id =  $(this).attr("id");
-            alertServer.cofirm("确认删除","删除",function (flag) {
+            alertServer.cofirm("确认删除","删除",null,function (flag) {
                 if(flag){
                     Ajax.Get("${base}/workflow/model/delete/"+id).done(function (res) {
                         window.location.reload()

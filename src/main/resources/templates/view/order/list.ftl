@@ -160,19 +160,27 @@
                 [#--</a>--]
                 [#if (item.payMethod)?? && (item.payMethod) == 3]
                     [#if (item.adminOk)?? && (item.adminOk) == 0]
+                        [#--[@shiro.hasPermission name = "system:order:adminOk:1"]--]
                         <a href="javascript:void (0)" class="updateAdminOk" data-id="${item.id}" data-adminOk="1">
                             <li class="fa fa-trash">确认支付</li>
                         </a>
+                        [#--[/@shiro.hasPermission]--]
+                        [#--[@shiro.hasPermission name = "system:order:adminOk:2"]--]
                         <a href="javascript:void (0)" class="updateAdminOk" data-id="${item.id}" data-adminOk="2">
                             <li class="fa fa-trash">未支付</li>
                         </a>
+                        [#--[/@shiro.hasPermission]--]
+
                     [/#if]
                 [/#if]
-                [#if (item.status)?? && (item.status) == 2]
+                    [#--[@shiro.hasPermission name = "system:order:shipments"]--]
+                        [#----]
+                    [#--[/@shiro.hasPermission]--]
+                    [#if (item.status)?? && (item.status) == 2]
                         <a href="javascript:void (0)" class="updateStatus" data-id="${item.id}" data-Status="3">
                             <li class="fa fa-trash">发货</li>
                         </a>
-                [/#if]
+                    [/#if]
                 [#--<a href="javascript:void (0)" class="delete" data-id="${item.id}">--]
                     [#--<li class="fa fa-trash">删除</li>--]
                 [#--</a>--]
@@ -218,13 +226,13 @@
         $(".updateAdminOk").click(function () {
             var id = $(this).attr("data-id");
             var adminOk = $(this).attr("data-adminOk");
-            alertServer.cofirm("确认操作", "确认", function (flag) {
+            alertServer.cofirm("确认操作", "确认",null, function (flag) {
                 if (flag) {
                     var ary = {
                         orderId:id,
                         adminOk:adminOk
                     }
-                    Ajax.Post("${basePath}/order/updateAdminOk",ary).done(function (res) {
+                    Ajax.Post2("${basePath}/order/updateAdminOk",ary).done(function (res) {
                         if (res.code == 200) {
                             Notify.success("操作成功");
                             window.location.reload()
@@ -273,13 +281,14 @@
 
             alertServer.cofirm("请输入运单号", "确认","input" ,function (expressNumber) {
                 console.log(expressNumber)
-                if (null != expressNumber && $.trim(expressNumber).length > 0) {
+                if (null != expressNumber && $.trim(expressNumber).length > 0 && expressNumber != "false" && expressNumber != false) {
+                    alert(expressNumber);
                     var ary = {
                         orderId:id,
                         status:status,
                         expressNumber:expressNumber
                     }
-                    Ajax.Post("${basePath}/order/updateStatus",ary).done(function (res) {
+                    Ajax.Post2("${basePath}/order/updateStatus",ary).done(function (res) {
                         if (res.code == 200) {
                             Notify.success("发货成功");
                             window.location.reload()

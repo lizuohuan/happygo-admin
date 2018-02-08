@@ -5,7 +5,6 @@
 <link href="${basePath}/assets/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
 <link href="${basePath}/assets/css/animate.min.css" rel="stylesheet" />
 <link href="${basePath}/assets/css/style.css" rel="stylesheet" />
-<link href="${basePath}/assets/css/layer.css" rel="stylesheet" />
 <link href="${basePath}/assets/css/style-responsive.min.css" rel="stylesheet" />
 <link href="${basePath}/assets/css/theme/default.css" rel="stylesheet" id="theme" />
 
@@ -74,4 +73,3 @@
 
 
 <script type="text/javascript" src="${basePath}/assets/js/angular.min.js"></script>
-<script type="text/javascript" src="${basePath}/assets/js/vue.min.js"></script>

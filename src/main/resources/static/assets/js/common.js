@@ -71,20 +71,21 @@ Ajax.ajax = function ajax(url, param, type) {
         url: url,
         data: param || {},
         type: type || 'GET',
+        contentType: "application/json; charset=utf-8",
         dataType: "json",
     });
 }
 Ajax.ajaxSend =function(url, param, type) {
     return Ajax.ajax(url, param, type).then(function(resp){
         console.log(resp);
-        return resp;
-        // // 成功回调
-        // if(resp.status){
-        //     return resp.body; // 直接返回要处理的数据，作为默认参数传入之后done()方法的回调
-        // }
-        // else{
-        //     return $.Deferred().reject(resp.msg); // 返回一个失败状态的deferred对象，把错误代码作为默认参数传入之后fail()方法的回调
-        // }
+        // return resp;
+        // 成功回调
+        if(resp.status){
+            return resp.body; // 直接返回要处理的数据，作为默认参数传入之后done()方法的回调
+        }
+        else{
+            return $.Deferred().reject(resp.msg); // 返回一个失败状态的deferred对象，把错误代码作为默认参数传入之后fail()方法的回调
+        }
     }, function(err){
         // 失败回调
         return $.Deferred().reject("操作失败 错误码"+err.status);
@@ -97,6 +98,40 @@ Ajax.Get = function (url) {
 
 Ajax.Post = function (url, params) {
     return Ajax.ajaxSend(url,params,'POST')
+}
+
+
+Ajax.ajax2 = function ajax(url, param, type) {
+    return $.ajax({
+        url: url,
+        data: param || {},
+        type: type || 'GET',
+        dataType: "json",
+    });
+}
+Ajax.ajaxSend2 =function(url, param, type) {
+    return Ajax.ajax2(url, param, type).then(function(resp){
+        console.log(resp);
+        return resp;
+        // 成功回调
+        // if(resp.status){
+        //     return resp.body; // 直接返回要处理的数据，作为默认参数传入之后done()方法的回调
+        // }
+        // else{
+        //     return $.Deferred().reject(resp.msg); // 返回一个失败状态的deferred对象，把错误代码作为默认参数传入之后fail()方法的回调
+        // }
+    }, function(err){
+        // 失败回调
+        return $.Deferred().reject("操作失败 错误码"+err.status);
+    });
+}
+
+Ajax.Get2 = function (url) {
+   return Ajax.ajaxSend2(url,null,'GET')
+}
+
+Ajax.Post2 = function (url, params) {
+    return Ajax.ajaxSend2(url,params,'POST')
 }
 
 
