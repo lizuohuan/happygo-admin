@@ -13,7 +13,7 @@
                     <h4 class="panel-title">添加商品分类名</h4>
                 </div>
                 <div class="panel-body">
-                    <form class="form-horizontal" action="${basePath}/productCategory/save" method="post">
+                    <form class="form-horizontal" id="subFrom" action="${basePath}/productCategory/save" method="post">
                         <div class="form-group">
                             <label class="col-md-1 control-label">分类名: </label>
                             <div class="col-md-6">
@@ -78,5 +78,30 @@
         }
     });
 
+
+    $(function () {
+        $("#subFrom").bootstrapValidator({
+            message:'This value is not valid',
+//            定义未通过验证的状态图标
+            feedbackIcons: {/*输入框不同状态，显示图片的样式*/
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },
+//            字段验证
+            fields:{
+//                分类名
+                name:{
+                    message:'分类名非法',
+                    validators:{
+//                        非空
+                        notEmpty:{
+                            message:'分类名不能为空'
+                        }
+                    }
+                }
+            }
+        })
+    })
 </script>
 
