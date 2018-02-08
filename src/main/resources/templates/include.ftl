@@ -2,6 +2,7 @@
 <#--<link href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />-->
 <link href="${basePath}/assets/plugins/jquery-ui/themes/base/minified/jquery-ui.min.css" rel="stylesheet" />
 <link href="${basePath}/assets/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+<script src="${basePath}/assets/plugins/bootstrap-validator/js/bootstrapValidator.css"></script>
 <link href="${basePath}/assets/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
 <link href="${basePath}/assets/css/animate.min.css" rel="stylesheet" />
 <link href="${basePath}/assets/css/style.css" rel="stylesheet" />
@@ -21,6 +22,7 @@
 <script src="${basePath}/assets/plugins/jquery/jquery-migrate-1.1.0.min.js"></script>
 <script src="${basePath}/assets/plugins/jquery-ui/ui/minified/jquery-ui.min.js"></script>
 <script src="${basePath}/assets/plugins/bootstrap/js/bootstrap.min.js"></script>
+<script src="${basePath}/assets/plugins/bootstrap-validator/js/bootstrapValidator.js"></script>
 <!--[if lt IE 9]>
 <script src="${basePath}/assets/crossbrowserjs/html5shiv.js"></script>
 <script src="${basePath}/assets/crossbrowserjs/respond.min.js"></script>
@@ -68,7 +70,7 @@
 
 
 <script src="${basePath}/assets/js/common.js"></script>
-<script src="${basePath}//assets/js/web_support.js"></script>
+<script src="${basePath}/assets/js/web_support.js"></script>
 <script src="${basePath}/assets/js/list.js"></script>
 
 
