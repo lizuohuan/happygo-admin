@@ -66,6 +66,14 @@ public class OrderController extends BaseController {
         map.put("userIsValid",userIsValid);
         map.put("adminOk",adminOk);
         model.addAttribute("page", orderService.list(pages,map));
+        model.addAttribute("orderNumber", orderNumber);
+        model.addAttribute("expressNumber", expressNumber);
+        model.addAttribute("nickName", nickName);
+        model.addAttribute("username", username);
+        model.addAttribute("status", status);
+        model.addAttribute("payMethod", payMethod);
+        model.addAttribute("userIsValid", userIsValid);
+        model.addAttribute("adminOk", adminOk);
         return "view/order/list";
     }
 

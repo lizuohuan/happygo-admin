@@ -89,7 +89,7 @@
             <td> ${item.name!''}</td>
             <td> ${item.title!''}</td>
             <td> [#if (item.product)?? ]${(item.product.name)!''}[/#if]</td>
-            <td> [#--${(item.img)!''}--][#if (item.img)?? ]<img style="height: 100px;width: auto" src="{{ipImg}}/${item.img}">[/#if]</td>
+            <td> [#--${(item.img)!''}--][#if (item.img)?? ]<a target="_blank" href="{{ipImg}}/${item.img}"><img style="height: 100px;width: auto" src="{{ipImg}}/${item.img}"></a>[/#if]</td>
             <td> ${item.link!''}</td>
             <td> ${(item.type==0)?string("商品","外链")}</td>
             <td>
