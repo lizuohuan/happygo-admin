@@ -2,7 +2,7 @@
 <#--<link href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />-->
 <link href="${basePath}/assets/plugins/jquery-ui/themes/base/minified/jquery-ui.min.css" rel="stylesheet" />
 <link href="${basePath}/assets/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
-<script src="${basePath}/assets/plugins/bootstrap-validator/js/bootstrapValidator.css"></script>
+<script src="${basePath}/assets/plugins/bootstrap-validator/css/bootstrapValidator.css"></script>
 <link href="${basePath}/assets/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
 <link href="${basePath}/assets/css/animate.min.css" rel="stylesheet" />
 <link href="${basePath}/assets/css/style.css" rel="stylesheet" />

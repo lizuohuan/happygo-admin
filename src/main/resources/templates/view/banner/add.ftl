@@ -13,7 +13,7 @@
                     <h4 class="panel-title">添加Banner</h4>
                 </div>
                 <div class="panel-body">
-                    <form class="form-horizontal" action="${basePath}/banner/save" method="post">
+                    <form class="form-horizontal" id="subFrom" action="${basePath}/banner/save" method="post">
                         <div class="form-group">
                             <label class="col-md-1 control-label">banner名: </label>
                             <div class="col-md-6">
@@ -86,6 +86,9 @@
             callback: function (data) {
                 $("#bannerImg").attr("src", Global.imageService + "/" + data[0].sourcePath);
                 $("input[name='img']").val(data[0].sourcePath);
+                $('#subFrom').data('bootstrapValidator')
+                        .updateStatus('img', 'NOT_VALIDATED', null)
+                        .validateField('img');
                 $("#bannerImg").attr("isHave", "1");
                 console.log(data)
             }
@@ -99,6 +102,7 @@
                     invalid: 'glyphicon glyphicon-remove',
                     validating: 'glyphicon glyphicon-refresh'
                 },
+                excluded:[":disabled"],
 //            字段验证
                 fields:{
                     name:{
@@ -131,15 +135,20 @@
                     type:{
                         message:'类型非法',
                         validators:{
-//                        非空
-                            notEmpty:{
-                                message:'请选择类型'
-                            },
-                            callback:function (value, validator) {
-                                if (value == "") {
-                                    return false;
-                                } else {
-                                    return true;
+                            callback: {
+                                message: '请选择类型',
+                                callback: function(value, validator,$field) {
+                                    if (value == "") {
+                                        return {
+                                            valid: false,       // or true
+                                            message: '请选择类型'
+                                        }
+                                    } else {
+                                        if (value == 0) {
+                                            validator.updateStatus("productId","VALID")
+                                        }
+                                        return true;
+                                    }
                                 }
                             }
                         }
@@ -147,17 +156,32 @@
                     productId:{
                         message:'商品非法',
                         validators:{
-//                        非空
-                            notEmpty:{
-                                message:'请选择商品'
-                            },
-                            callback:function (value, validator) {
-                                if (value == "" && $("#type").val() == 0) {
-                                    return false;
-                                } else {
-                                    return true;
+                            callback: {
+                               message: '必须选择一个商品',
+                               callback: function(value, validator) {
+                                   alert("value="+value);
+                                   var type = $("#type").val();
+                                   alert("type="+type);
+                                   if (value == "" && type != null && type != "" && type == 0) {
+                                       return {
+                                           valid: false,       // or true
+                                           message: '请选择商品'
+                                       }
+                                   } else {
+                                       return true;
+                                   }
                                 }
                             }
+                            // callback:function (value, validator, $field) {
+                            //     if (value == "" && $("#type").val() == 0) {
+                            //         return {
+                            //             valid: false,       // or true
+                            //             message: '请选择商品'
+                            //         }
+                            //     } else {
+                            //         return true;
+                            //     }
+                            // }
                         }
                     },
                 }

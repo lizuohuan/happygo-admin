@@ -35,6 +35,46 @@
                             </div>
                         </div>
                         <div class="form-group">
+                            <label class="col-md-1 control-label">一级分销积分提成比例: </label>
+                            <div class="col-md-6">
+                                <div class="input-group">
+                                    <input type="text" name="oneRatio" class="form-control"
+                                           value="${(systemConfig.oneRatio)!''}"/>
+                                    <div class="input-group-addon">%</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-1 control-label">二级分销积分提成比例: </label>
+                            <div class="col-md-6">
+                                <div class="input-group">
+                                    <input type="text" name="twoRatio" class="form-control"
+                                           value="${(systemConfig.twoRatio)!''}"/>
+                                    <div class="input-group-addon">%</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-1 control-label">三级分销积分提成比例: </label>
+                            <div class="col-md-6">
+                                <div class="input-group">
+                                    <input type="text" name="threeRatio" class="form-control"
+                                           value="${(systemConfig.threeRatio)!''}"/>
+                                    <div class="input-group-addon">%</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-1 control-label">分销一级的欢喜券提成比例: </label>
+                            <div class="col-md-6">
+                                <div class="input-group">
+                                    <input type="text" name="oneTicketRatio" class="form-control"
+                                           value="${(systemConfig.oneTicketRatio)!''}"/>
+                                    <div class="input-group-addon">%</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
                             <label class="col-md-4 control-label"></label>
                             <div class="col-md-6">
                                 <button type="submit" class="btn btn-success m-r-5 m-b-5">保存</button>
