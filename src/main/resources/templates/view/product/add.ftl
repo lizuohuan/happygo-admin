@@ -126,7 +126,7 @@
                         <div class="form-group">
                             <label class="col-md-4 control-label"></label>
                             <div class="col-md-6">
-                                <button type="button" id="submitBtn" class="btn btn-success m-r-5 m-b-5">保存</button>
+                                <button type="submit" id="submitBtn" class="btn btn-success m-r-5 m-b-5">保存</button>
                             </div>
                         </div>
                     </form>
@@ -228,7 +228,7 @@
                 imgJsonAry.push($(this).attr("src2"));
             });
             $("input[name='imgJsonAryStr']").val(imgJsonAry.toString());
-            $("#formProduct").submit();
+            // $("#formProduct").submit();
         });
         //装配选中的商品分类
         $("#productCategoryId").change(function () {
@@ -412,42 +412,6 @@
                         }
                     }
                 },
-//                 describe:{
-//                     message:'商品描述非法',
-//                     validators:{
-// //                        非空
-//                         notEmpty:{
-//                             message:'商品描述不能为空'
-//                         }
-//                     }
-//                 },
-                // type:{
-                //     message:'类型非法',
-                //     validators:{
-                //         callback: {
-                //             message: '请选择类型',
-                //             callback: function(value, validator,$field) {
-                //                 if (value == "") {
-                //                     validator.updateStatus("productId","VALID").validateField('productId');
-                //                     validator.updateStatus("link","VALID").validateField('link');
-                //                     return {
-                //                         valid: false,       // or true
-                //                         message: '请选择类型'
-                //                     }
-                //                 } else {
-                //                     if (value == 0) {
-                //                         validator.updateStatus("productId","NOT_VALIDATED").validateField('productId');
-                //                         validator.updateStatus("link","VALID").validateField('link');
-                //                     } else {
-                //                         validator.updateStatus("productId","VALID").validateField('productId');
-                //                         validator.updateStatus("link","NOT_VALIDATED").validateField('link');
-                //                     }
-                //                     return true;
-                //                 }
-                //             }
-                //         }
-                //     }
-                // },
                 productCategoryId:{
                     message:'商品分类非法',
                     validators:{
