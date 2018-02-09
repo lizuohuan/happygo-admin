@@ -90,6 +90,79 @@
                 console.log(data)
             }
         });
+        $(function () {
+            $("#subFrom").bootstrapValidator({
+                message:'This value is not valid',
+//            定义未通过验证的状态图标
+                feedbackIcons: {/*输入框不同状态，显示图片的样式*/
+                    valid: 'glyphicon glyphicon-ok',
+                    invalid: 'glyphicon glyphicon-remove',
+                    validating: 'glyphicon glyphicon-refresh'
+                },
+//            字段验证
+                fields:{
+                    name:{
+                        message:'banner名非法',
+                        validators:{
+//                        非空
+                            notEmpty:{
+                                message:'banner名不能为空'
+                            }
+                        }
+                    },
+                    title:{
+                        message:'标题非法',
+                        validators:{
+//                        非空
+                            notEmpty:{
+                                message:'标题名不能为空'
+                            }
+                        }
+                    },
+                    img:{
+                        message:'banner图非法',
+                        validators:{
+//                        非空
+                            notEmpty:{
+                                message:'banner图不能为空'
+                            }
+                        }
+                    },
+                    type:{
+                        message:'类型非法',
+                        validators:{
+//                        非空
+                            notEmpty:{
+                                message:'请选择类型'
+                            },
+                            callback:function (value, validator) {
+                                if (value == "") {
+                                    return false;
+                                } else {
+                                    return true;
+                                }
+                            }
+                        }
+                    },
+                    productId:{
+                        message:'商品非法',
+                        validators:{
+//                        非空
+                            notEmpty:{
+                                message:'请选择商品'
+                            },
+                            callback:function (value, validator) {
+                                if (value == "" && $("#type").val() == 0) {
+                                    return false;
+                                } else {
+                                    return true;
+                                }
+                            }
+                        }
+                    },
+                }
+            })
+        })
         // $("#submitBtn").click(function () {
         //     $("input[name='describe']").val(ue.getContent());
         //     var imgJsonAry = [];
