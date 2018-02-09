@@ -22,7 +22,7 @@
                         <div class="form-group">
                             <label class="col-md-1 control-label">商品分类:</label>
                             <div class="col-md-4">
-                                <select class="form-control" id="productCategoryId">
+                                <select class="form-control" name="productCategoryId" id="productCategoryId">
                                     <option value="" >请选择商品分类</option>
                                     [#list productCategoryList as productCategory]
                                         [#if productCategory.childList?? && (productCategory.childList?size > 0)]
@@ -32,11 +32,11 @@
                                                 [/#list]
                                             </optgroup>
                                         [#else ]
-                                        <option value="${productCategory.id}" [#if productCategory.id ==(product.productCategoryId)!'' ]selected="selected"[/#if]>${productCategory.name}</option>
+                                        [#--<option value="${productCategory.id}" [#if productCategory.id ==(product.productCategoryId)!'' ]selected="selected"[/#if]>${productCategory.name}</option>--]
                                         [/#if]
                                     [/#list]
                                 </select>
-                                <input type="text" style="display: none" name="productCategoryId" class="form-control" placeholder="分类"  value="${(product.productCategoryId)!''}"/>
+                                [#--<input type="text" style="display: none" name="productCategoryId" class="form-control" placeholder="分类"  value="${(product.productCategoryId)!''}"/>--]
                             </div>
                         </div>
                         <div class="form-group">
@@ -118,10 +118,10 @@
                         </div>
                         <div class="form-group">
                             <label class="col-md-1 control-label">商品描述:</label>
-                            <input type="text" name="describe" style="display: none" [#--value="${(product.describe)!''}"--] />
                             <div class="col-md-4">
                                 <script id="editor" type="text/plain" style="width:1024px;height:300px;"></script>
                             </div>
+                            <input type="text" name="describe" style="display: none" [#--value="${(product.describe)!''}"--] />
                         </div>
                         <div class="form-group">
                             <label class="col-md-4 control-label"></label>
@@ -167,6 +167,9 @@
             callback:function(data) {
                 $("#coverImg").attr("src",Global.imageService+"/"+data[0].sourcePath);
                 $("input[name='coverImg']").val(data[0].sourcePath);
+                $('#formProduct').data('bootstrapValidator')
+                        .updateStatus('coverImg', 'NOT_VALIDATED', null)
+                        .validateField('coverImg');
                 $("#coverImg").attr("isHave","1");
                 console.log(data)
             }
@@ -184,12 +187,21 @@
                 $("#imgJsonAryStr").append(html);
                 // document.getElementById("imgJsonAryStrImg").style.display = block;
                 $("#imgJsonAryStr").css("display","block");
+                $("input[name=imgJsonAryStr]").val(data[0].sourcePath);
+                $('#formProduct').data('bootstrapValidator')
+                        .updateStatus('imgJsonAryStr', 'NOT_VALIDATED', null)
+                        .validateField('imgJsonAryStr');
+
                 $(".delImg").click(function () {
                     $(this).parent("div").remove();
-                    var imgJsonAryStr = $("#imgJsonAryStrImg");
-                    if (imgJsonAryStr.children("div") == null) {
+                    var imgJsonAryStr = $("#imgJsonAryStr");
+                    if (imgJsonAryStr.children("div").length == 0) {
                         // document.getElementById("imgJsonAryStrImg").style.display = "none";
                         $("#imgJsonAryStr").css("display","none");
+                        $("input[name=imgJsonAryStr]").val("");
+                        $('#formProduct').data('bootstrapValidator')
+                                .updateStatus('imgJsonAryStr', 'NOT_VALIDATED', null)
+                                .validateField('imgJsonAryStr');
                     }
                 });
                 console.log(data)
@@ -198,9 +210,13 @@
 
         $(".delImg").click(function () {
             $(this).parent("div").remove();
-            var imgJsonAryStr = $("#imgJsonAryStrImg");
-            if (imgJsonAryStr.children("div") == null) {
+            var imgJsonAryStr = $("#imgJsonAryStr");
+            if (imgJsonAryStr.children("div").length == 0) {
                 $("#imgJsonAryStr").css("display","none");
+                $("input[name=imgJsonAryStr]").val("");
+                $('#formProduct').data('bootstrapValidator')
+                        .updateStatus('imgJsonAryStr', 'NOT_VALIDATED', null)
+                        .validateField('imgJsonAryStr');
             }
         });
 
@@ -224,7 +240,9 @@
             } else {
                 $("input[name='isPromotion']").val(0);
             }
-
+            $('#formProduct').data('bootstrapValidator')
+                    .updateStatus('isPromotion', 'NOT_VALIDATED',null)
+                    .validateField('isPromotion');
         });
         $("#isIntegral").change(function () {
             if($(this).is(':checked')) {
@@ -232,7 +250,9 @@
             } else {
                 $("input[name='isIntegral']").val(0);
             }
-
+            $('#formProduct').data('bootstrapValidator')
+                    .updateStatus('isIntegral', 'NOT_VALIDATED',null)
+                    .validateField('isIntegral');
         });
         $("#isHot").change(function () {
             if($(this).is(':checked')) {
@@ -242,5 +262,209 @@
             }
 
         });
+
+
+        $("#formProduct").bootstrapValidator({
+            message:'This value is not valid',
+//            定义未通过验证的状态图标
+            feedbackIcons: {/*输入框不同状态，显示图片的样式*/
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },
+            excluded:[":disabled"],
+//            字段验证
+            fields:{
+                name:{
+                    message:'商品名称非法',
+                    validators:{
+//                        非空
+                        notEmpty:{
+                            message:'商品名称不能为空'
+                        }
+                    }
+                },
+                title:{
+                    message:'标题非法',
+                    validators:{
+//                        非空
+                        notEmpty:{
+                            message:'标题名不能为空'
+                        }
+                    }
+                },
+                coverImg:{
+                    message:'商品封面图非法',
+                    validators:{
+//                        非空
+                        notEmpty:{
+                            message:'商品封面图不能为空'
+                        }
+                    }
+                },
+                imgJsonAryStr:{
+                    message:'商品轮播图非法',
+                    validators:{
+                        callback: {
+                            callback: function(value, validator) {
+                                var imgJsonAryStr = $("#imgJsonAryStr");
+                                if (imgJsonAryStr.children("div").length == 0) {
+                                    return {
+                                        valid: false,       // or true
+                                        message: '商品轮播图不能为空'
+                                    }
+                                }
+                                return true;
+                            }
+                        }
+                    }
+                },
+                number:{
+                    message:'商品编号非法',
+                    validators:{
+//                        非空
+                        notEmpty:{
+                            message:'商品编号不能为空'
+                        }
+                    }
+                },
+                price:{
+                    message:'商品价格非法',
+                    validators:{
+//                        非空
+                        notEmpty:{
+                            message:'商品价格不能为空'
+                        },
+                        regexp:{
+                            regexp:/^\d+(\.\d{2})?$/,
+                            message:'价格由数字和.组成'
+                        }
+                    }
+                },
+                isPromotion:{
+                    message:'是否促销非法',
+                    validators:{
+                        callback: {
+                            callback: function(value, validator) {
+                                validator.updateStatus("promotionPrice","NOT_VALIDATED").validateField('promotionPrice');
+                                return true;
+                            }
+                        }
+                    }
+                },
+                promotionPrice:{
+                    message:'促销价非法',
+                    validators:{
+                        callback: {
+                            callback: function(value, validator) {
+                                var isPromotion =  $("input[name='isPromotion']").val();;
+                                if (value == "" && isPromotion != null && isPromotion != "" && isPromotion == 1) {
+                                    return {
+                                        valid: false,       // or true
+                                        message: '请填写促销价'
+                                    }
+                                } else {
+                                    return true;
+                                }
+                            }
+                        },
+                        regexp:{
+                            regexp:/^\d+(\.\d{2})?$/,
+                            message:'价格由数字和.组成'
+                        }
+
+                    }
+                },
+                isIntegral:{
+                    message:'是否为积分商品非法',
+                    validators:{
+                        callback: {
+                            callback: function(value, validator) {
+                                if (value == 1) {
+                                    validator.updateStatus("integral","NOT_VALIDATED").validateField('integral');
+                                } else {
+                                    validator.updateStatus("integral","VALID").validateField('integral');
+                                }
+                                return true;
+                            }
+                        }
+                    }
+                },
+                integral:{
+                    message:'返还积分非法',
+                    validators:{
+                        callback: {
+                            callback: function(value, validator) {
+                                var isIntegral =  $("input[name='isIntegral']").val();;
+                                if (value == "" && isIntegral != null && isIntegral != "" && isIntegral == 1) {
+                                    return {
+                                        valid: false,       // or true
+                                        message: '请填写返还积分'
+                                    }
+                                } else {
+                                    return true;
+                                }
+                            }
+                        },
+                        regexp:{
+                            regexp: /^\+?[1-9][0-9]*$/,
+                            message:'返还积分只能为整数'
+                        }
+                    }
+                },
+//                 describe:{
+//                     message:'商品描述非法',
+//                     validators:{
+// //                        非空
+//                         notEmpty:{
+//                             message:'商品描述不能为空'
+//                         }
+//                     }
+//                 },
+                // type:{
+                //     message:'类型非法',
+                //     validators:{
+                //         callback: {
+                //             message: '请选择类型',
+                //             callback: function(value, validator,$field) {
+                //                 if (value == "") {
+                //                     validator.updateStatus("productId","VALID").validateField('productId');
+                //                     validator.updateStatus("link","VALID").validateField('link');
+                //                     return {
+                //                         valid: false,       // or true
+                //                         message: '请选择类型'
+                //                     }
+                //                 } else {
+                //                     if (value == 0) {
+                //                         validator.updateStatus("productId","NOT_VALIDATED").validateField('productId');
+                //                         validator.updateStatus("link","VALID").validateField('link');
+                //                     } else {
+                //                         validator.updateStatus("productId","VALID").validateField('productId');
+                //                         validator.updateStatus("link","NOT_VALIDATED").validateField('link');
+                //                     }
+                //                     return true;
+                //                 }
+                //             }
+                //         }
+                //     }
+                // },
+                productCategoryId:{
+                    message:'商品分类非法',
+                    validators:{
+                        callback: {
+                            message: '请选择商品分类',
+                            callback: function(value, validator) {
+                                if (value == "") {
+                                    return false;
+                                } else {
+                                    return true;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        })
+
     });
 </script>

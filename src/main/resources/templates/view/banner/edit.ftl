@@ -13,7 +13,7 @@
                     <h4 class="panel-title">编辑Banner</h4>
                 </div>
                 <div class="panel-body">
-                    <form class="form-horizontal" action="${basePath}/banner/save" method="post">
+                    <form class="form-horizontal" id="subFrom" action="${basePath}/banner/save" method="post">
                         <input type="hidden" name="id" value="${(banner.id)!''}">
                         <div class="form-group">
                             <label class="col-md-1 control-label">banner名: </label>
@@ -97,6 +97,111 @@
                 console.log(data)
             }
         });
+        $("#subFrom").bootstrapValidator({
+            message:'This value is not valid',
+//            定义未通过验证的状态图标
+            feedbackIcons: {/*输入框不同状态，显示图片的样式*/
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },
+            excluded:[":disabled"],
+//            字段验证
+            fields:{
+                name:{
+                    message:'banner名非法',
+                    validators:{
+//                        非空
+                        notEmpty:{
+                            message:'banner名不能为空'
+                        }
+                    }
+                },
+                title:{
+                    message:'标题非法',
+                    validators:{
+//                        非空
+                        notEmpty:{
+                            message:'标题名不能为空'
+                        }
+                    }
+                },
+                img:{
+                    message:'banner图非法',
+                    validators:{
+//                        非空
+                        notEmpty:{
+                            message:'banner图不能为空'
+                        }
+                    }
+                },
+                type:{
+                    message:'类型非法',
+                    validators:{
+                        callback: {
+                            message: '请选择类型',
+                            callback: function(value, validator,$field) {
+                                if (value == "") {
+                                    validator.updateStatus("productId","VALID").validateField('productId');
+                                    validator.updateStatus("link","VALID").validateField('link');
+                                    return {
+                                        valid: false,       // or true
+                                        message: '请选择类型'
+                                    }
+                                } else {
+                                    if (value == 0) {
+                                        validator.updateStatus("productId","NOT_VALIDATED").validateField('productId');
+                                        validator.updateStatus("link","VALID").validateField('link');
+                                    } else {
+                                        validator.updateStatus("productId","VALID").validateField('productId');
+                                        validator.updateStatus("link","NOT_VALIDATED").validateField('link');
+                                    }
+                                    return true;
+                                }
+                            }
+                        }
+                    }
+                },
+                productId:{
+                    message:'商品非法',
+                    validators:{
+                        callback: {
+                            message: '必须选择一个商品',
+                            callback: function(value, validator) {
+                                var type = $("#type").val();
+                                if (value == "" && type != null && type != "" && type == 0) {
+                                    return {
+                                        valid: false,       // or true
+                                        message: '请选择商品'
+                                    }
+                                } else {
+                                    return true;
+                                }
+                            }
+                        }
+                    }
+                },
+                link:{
+                    message:'外链非法',
+                    validators:{
+                        callback: {
+                            message: '请输入外链',
+                            callback: function(value, validator) {
+                                var type = $("#type").val();
+                                if (value == "" && type != null && type != "" && type == 1) {
+                                    return {
+                                        valid: false,       // or true
+                                        message: '请输入外链'
+                                    }
+                                } else {
+                                    return true;
+                                }
+                            }
+                        }
+                    }
+                },
+            }
+        })
     });
 
 </script>

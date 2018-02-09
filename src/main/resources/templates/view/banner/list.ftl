@@ -96,9 +96,9 @@
                 <a href="${basePath}/banner/edit?id=${item.id}">
                     <li class="fa  fa-edit">编辑</li>
                 </a>
-                <a href="javascript:void (0)" class="delete" data-id="${item.id}">
-                    <li class="fa fa-trash">删除</li>
-                </a>
+                [#--<a href="javascript:void (0)" class="delete" data-id="${item.id}">--]
+                    [#--<li class="fa fa-trash">删除</li>--]
+                [#--</a>--]
             </td>
         </tr>
         [/#list]
